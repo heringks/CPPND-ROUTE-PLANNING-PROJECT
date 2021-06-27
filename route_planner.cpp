@@ -47,7 +47,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
         neighbor->parent = current_node;
 
         // Set the g_value
-        neighbor->g_value = distance + neighbor->distance(*current_node);
+        neighbor->g_value = current_node->g_value + neighbor->distance(*current_node);
 
         // Add the neighbor to the open_list
         open_list.emplace_back(neighbor);
@@ -112,8 +112,6 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
         // Add the distance from the node to its parent to the distance variable
         distance += node->distance(*(node->parent));
 
-        std::cout << "distance = " << distance << "\n";
- 
         // Push the parent node onto the back of the path_found vector
         path_found.emplace_back(*(node->parent));
 
@@ -142,20 +140,15 @@ void RoutePlanner::AStarSearch() {
 
     // TODO: Implement your solution here.
 
-    // Initialize the current node to the start node and add it to the open list
+    // Initialize the start node, add it to the open list, and set it as the initial current node
+    start_node->visited = true;
+    start_node->g_value = 0.0;
+    open_list.emplace_back(start_node);
     current_node = start_node;
-    current_node->visited = true;
-    open_list.emplace_back(current_node);
-
-    std::cout << "Start node x = " << start_node->x << "   ";
-    std::cout << "Start node y = " << start_node->y << "\n";
 
     // While the end node has not been reached and theopen list is not empty
     while ((current_node != end_node) && (!open_list.empty())) {
-
-        std::cout << "Current node x = " << current_node->x << "   ";
-        std::cout << "Current node y = " << current_node->y << "\n";
-
+        
         // Find the neighbors of the current node
         AddNeighbors(current_node);
 
@@ -163,11 +156,6 @@ void RoutePlanner::AStarSearch() {
         current_node = NextNode();
     }
     
-    std::cout << "Current node x = " << current_node->x << "   ";
-    std::cout << "Current node y = " << current_node->y << "\n";
-    std::cout << "End node x = " << end_node->x << "   ";
-    std::cout << "End node y = " << end_node->y << "\n";
-
     // Return the final path found
     if (current_node == end_node) {
         m_Model.path = ConstructFinalPath(current_node);
