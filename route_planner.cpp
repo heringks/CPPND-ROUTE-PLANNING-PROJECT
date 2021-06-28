@@ -69,7 +69,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 bool Compare(const RouteModel::Node *i, const RouteModel::Node *j) {
     float f1 = i->h_value + i->g_value;
     float f2 = j->h_value + j->g_value;
-    return f1 < f2;
+    return f1 <= f2;
 }
 
 RouteModel::Node *RoutePlanner::NextNode() {
