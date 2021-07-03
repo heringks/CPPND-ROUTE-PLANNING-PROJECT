@@ -34,6 +34,7 @@ float RoutePlanner::CalculateHValue(const RouteModel::Node *node) {
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 
+
     // Populate the current_node.neighbors vector with all the neighbors
     current_node -> FindNeighbors();
 
